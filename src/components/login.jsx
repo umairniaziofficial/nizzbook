@@ -1,9 +1,8 @@
-
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { auth } from '../configs/firebaseConfig.js';
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import { signInWithEmailAndPassword, signInWithRedirect, GoogleAuthProvider, FacebookAuthProvider } from 'firebase/auth';
 import GoogleLogo from "../assets/GoogleLogo.svg";
 import FacebookLogo from "../assets/FacebookLogo.svg";
 
@@ -16,7 +15,6 @@ export default function Login() {
   const { currentUser } = useAuth(); 
 
   useEffect(() => {
-    
     if (currentUser) {
       navigate('/home');
     }
@@ -36,7 +34,6 @@ export default function Login() {
     }
   };
 
-  
   const getFriendlyErrorMessage = (code) => {
     switch (code) {
       case 'auth/invalid-email':
@@ -49,6 +46,26 @@ export default function Login() {
         return 'Incorrect password. Please try again.';
       default:
         return 'An error occurred. Please try again later.';
+    }
+  };
+
+  const handleGoogleLogin = async () => {
+    const googleProvider = new GoogleAuthProvider();
+    try {
+      await signInWithRedirect(auth, googleProvider);
+    } catch (error) {
+      console.error("Google login error: ", error);
+      setErrorMessage(getFriendlyErrorMessage(error.code));
+    }
+  };
+
+  const handleFacebookLogin = async () => {
+    const facebookProvider = new FacebookAuthProvider();
+    try {
+      await signInWithRedirect(auth, facebookProvider);
+    } catch (error) {
+      console.error("Facebook login error: ", error);
+      setErrorMessage(getFriendlyErrorMessage(error.code));
     }
   };
 
@@ -93,10 +110,10 @@ export default function Login() {
           <span className="text-gray-300 text-sm">Or Continue with</span>
         </div>
         <div className="flex gap-4 mt-4 w-3/4">
-          <button className="bg-slate-700 drop-shadow-md h-auto py-2 w-full rounded hover:bg-slate-900">
+          <button className="bg-slate-700 drop-shadow-md h-auto py-2 w-full rounded hover:bg-slate-900" onClick={handleGoogleLogin}>
             <img src={GoogleLogo} alt="Google Logo" className="h-6 w-full" />
           </button>
-          <button className="bg-slate-700 drop-shadow-md h-auto py-2 w-full rounded hover:bg-slate-900">
+          <button className="bg-slate-700 drop-shadow-md h-auto py-2 w-full rounded hover:bg-slate-900" onClick={handleFacebookLogin}>
             <img src={FacebookLogo} alt="Facebook Logo" className="h-6 w-full" />
           </button>
         </div>
