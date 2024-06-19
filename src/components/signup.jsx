@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { auth } from "../configs/firebaseConfig.js";
 import { createUserWithEmailAndPassword } from "firebase/auth";
+import SideImage from "./SideImage.jsx";
 
 const getFriendlyErrorMessage = (errorCode) => {
   switch (errorCode) {
@@ -56,8 +57,8 @@ export default function SignUp() {
   };
 
   return (
-    <div className="flex w-full mx-auto min-h-screen overflow-hidden">
-      <div className="flex flex-col w-1/2 text-white bg-[#040605] pb-8 justify-center pl-40">
+    <div className="flex w-screen min-h-screen mx-auto bg-[#040605]">
+     <div className="flex flex-col md:w-1/2 px-2 w-full md:pl-40 md:items-start items-center justify-center text-white bg-[#040605]">
         <h1 className="text-4xl font-bold mb-4 text-gray-300">Sign Up Form</h1>
         <form onSubmit={handleSignUp} className="flex flex-col gap-4 w-3/4">
           <input
@@ -111,13 +112,7 @@ export default function SignUp() {
           </Link>
         </div>
       </div>
-      <div className="w-1/2 h-full">
-        <img
-          src="https://images.unsplash.com/photo-1554177255-61502b352de3?q=80&w=3870&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-          alt="social media image"
-          className="h-screen w-full object-cover object-center"
-        />
-      </div>
+      <SideImage/>
     </div>
   );
 }
